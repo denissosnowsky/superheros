@@ -1,0 +1,16 @@
+query Hero($heroId: ID!){
+  hero(id: $heroId) {
+    id
+    createdAt
+    updatedAt
+    nickname
+    real_name
+    origin_description
+    superpowers
+    catch_phrase
+    images {
+      id
+      name
+    }
+  }
+}
