@@ -3,7 +3,7 @@ schema:
   - "http://localhost:5000/graphql"
 documents:
   - "src/store/queries/*.gql"
-  #- "src/store/mutations/*.gql"
+  - "src/store/mutations/*.gql"
 generates:
   src/store/generated/graphql.tsx:
     config:

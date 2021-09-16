@@ -34,5 +34,11 @@ export const RootQuery = new GraphQLObjectType({
         });
       },
     },
+    countHeros: {
+      type: GraphQLInt,
+      resolve(_parent, _args, ctx: ApolloServerContext) {
+        return ctx.prisma.hero.count({});
+      },
+    },
   },
 });

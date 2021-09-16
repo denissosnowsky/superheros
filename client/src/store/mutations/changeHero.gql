@@ -1,0 +1,21 @@
+mutation ChangeHero(
+  $id: ID!
+  $nickname: String
+  $realName: String
+  $originDescription: String
+  $superPowers: String
+  $catchPhrase: String
+  $addImages: [Upload]
+  $deleteImages: [ID]
+) {
+  changeHero(
+    id: $id
+    nickname: $nickname
+    real_name: $realName
+    origin_description: $originDescription
+    superpowers: $superPowers
+    catch_phrase: $catchPhrase
+    addImages: $addImages
+    deleteImages: $deleteImages
+  )
+}

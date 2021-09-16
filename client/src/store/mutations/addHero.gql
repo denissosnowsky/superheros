@@ -1,0 +1,17 @@
+mutation AddHero(
+  $nickname: String!
+  $realName: String!
+  $originDescription: String!
+  $superPowers: String!
+  $catchPhrase: String!
+  $images: [Upload]
+) {
+  addHero(
+    nickname: $nickname
+    real_name: $realName
+    origin_description: $originDescription
+    superpowers: $superPowers
+    catch_phrase: $catchPhrase
+    images: $images
+  )
+}

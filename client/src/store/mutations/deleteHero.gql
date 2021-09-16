@@ -1,0 +1,3 @@
+mutation DeleteHero($deleteHeroId: ID!) {
+  deleteHero(id: $deleteHeroId)
+}

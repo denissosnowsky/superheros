@@ -43,6 +43,8 @@ export type Image = {
 export type Mutation = {
   __typename?: 'Mutation';
   addHero?: Maybe<Scalars['Boolean']>;
+  changeHero?: Maybe<Scalars['Boolean']>;
+  deleteHero?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -55,8 +57,26 @@ export type MutationAddHeroArgs = {
   superpowers: Scalars['String'];
 };
 
+
+export type MutationChangeHeroArgs = {
+  addImages?: Maybe<Array<Maybe<Scalars['Upload']>>>;
+  catch_phrase?: Maybe<Scalars['String']>;
+  deleteImages?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  id: Scalars['ID'];
+  nickname?: Maybe<Scalars['String']>;
+  origin_description?: Maybe<Scalars['String']>;
+  real_name?: Maybe<Scalars['String']>;
+  superpowers?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteHeroArgs = {
+  id: Scalars['ID'];
+};
+
 export type RootQueryType = {
   __typename?: 'RootQueryType';
+  countHeros?: Maybe<Scalars['Int']>;
   hero?: Maybe<Hero>;
   heros?: Maybe<Array<Maybe<Hero>>>;
 };
@@ -71,6 +91,44 @@ export type RootQueryTypeHerosArgs = {
   skip: Scalars['Int'];
   take: Scalars['Int'];
 };
+
+export type AddHeroMutationVariables = Exact<{
+  nickname: Scalars['String'];
+  realName: Scalars['String'];
+  originDescription: Scalars['String'];
+  superPowers: Scalars['String'];
+  catchPhrase: Scalars['String'];
+  images?: Maybe<Array<Maybe<Scalars['Upload']>> | Maybe<Scalars['Upload']>>;
+}>;
+
+
+export type AddHeroMutation = { __typename?: 'Mutation', addHero?: Maybe<boolean> };
+
+export type ChangeHeroMutationVariables = Exact<{
+  id: Scalars['ID'];
+  nickname?: Maybe<Scalars['String']>;
+  realName?: Maybe<Scalars['String']>;
+  originDescription?: Maybe<Scalars['String']>;
+  superPowers?: Maybe<Scalars['String']>;
+  catchPhrase?: Maybe<Scalars['String']>;
+  addImages?: Maybe<Array<Maybe<Scalars['Upload']>> | Maybe<Scalars['Upload']>>;
+  deleteImages?: Maybe<Array<Maybe<Scalars['ID']>> | Maybe<Scalars['ID']>>;
+}>;
+
+
+export type ChangeHeroMutation = { __typename?: 'Mutation', changeHero?: Maybe<boolean> };
+
+export type DeleteHeroMutationVariables = Exact<{
+  deleteHeroId: Scalars['ID'];
+}>;
+
+
+export type DeleteHeroMutation = { __typename?: 'Mutation', deleteHero?: Maybe<boolean> };
+
+export type CountHerosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CountHerosQuery = { __typename?: 'RootQueryType', countHeros?: Maybe<number> };
 
 export type HeroQueryVariables = Exact<{
   heroId: Scalars['ID'];
@@ -209,9 +267,12 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addHero?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddHeroArgs, 'catch_phrase' | 'nickname' | 'origin_description' | 'real_name' | 'superpowers'>>;
+  changeHero?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangeHeroArgs, 'id'>>;
+  deleteHero?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteHeroArgs, 'id'>>;
 }>;
 
 export type RootQueryTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['RootQueryType'] = ResolversParentTypes['RootQueryType']> = ResolversObject<{
+  countHeros?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   hero?: Resolver<Maybe<ResolversTypes['Hero']>, ParentType, ContextType, RequireFields<RootQueryTypeHeroArgs, 'id'>>;
   heros?: Resolver<Maybe<Array<Maybe<ResolversTypes['Hero']>>>, ParentType, ContextType, RequireFields<RootQueryTypeHerosArgs, 'skip' | 'take'>>;
 }>;
@@ -231,6 +292,159 @@ export type Resolvers<ContextType = any> = ResolversObject<{
 
 
 
+export const AddHeroDocument = gql`
+    mutation AddHero($nickname: String!, $realName: String!, $originDescription: String!, $superPowers: String!, $catchPhrase: String!, $images: [Upload]) {
+  addHero(
+    nickname: $nickname
+    real_name: $realName
+    origin_description: $originDescription
+    superpowers: $superPowers
+    catch_phrase: $catchPhrase
+    images: $images
+  )
+}
+    `;
+export type AddHeroMutationFn = Apollo.MutationFunction<AddHeroMutation, AddHeroMutationVariables>;
+
+/**
+ * __useAddHeroMutation__
+ *
+ * To run a mutation, you first call `useAddHeroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddHeroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addHeroMutation, { data, loading, error }] = useAddHeroMutation({
+ *   variables: {
+ *      nickname: // value for 'nickname'
+ *      realName: // value for 'realName'
+ *      originDescription: // value for 'originDescription'
+ *      superPowers: // value for 'superPowers'
+ *      catchPhrase: // value for 'catchPhrase'
+ *      images: // value for 'images'
+ *   },
+ * });
+ */
+export function useAddHeroMutation(baseOptions?: Apollo.MutationHookOptions<AddHeroMutation, AddHeroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddHeroMutation, AddHeroMutationVariables>(AddHeroDocument, options);
+      }
+export type AddHeroMutationHookResult = ReturnType<typeof useAddHeroMutation>;
+export type AddHeroMutationResult = Apollo.MutationResult<AddHeroMutation>;
+export type AddHeroMutationOptions = Apollo.BaseMutationOptions<AddHeroMutation, AddHeroMutationVariables>;
+export const ChangeHeroDocument = gql`
+    mutation ChangeHero($id: ID!, $nickname: String, $realName: String, $originDescription: String, $superPowers: String, $catchPhrase: String, $addImages: [Upload], $deleteImages: [ID]) {
+  changeHero(
+    id: $id
+    nickname: $nickname
+    real_name: $realName
+    origin_description: $originDescription
+    superpowers: $superPowers
+    catch_phrase: $catchPhrase
+    addImages: $addImages
+    deleteImages: $deleteImages
+  )
+}
+    `;
+export type ChangeHeroMutationFn = Apollo.MutationFunction<ChangeHeroMutation, ChangeHeroMutationVariables>;
+
+/**
+ * __useChangeHeroMutation__
+ *
+ * To run a mutation, you first call `useChangeHeroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeHeroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeHeroMutation, { data, loading, error }] = useChangeHeroMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      nickname: // value for 'nickname'
+ *      realName: // value for 'realName'
+ *      originDescription: // value for 'originDescription'
+ *      superPowers: // value for 'superPowers'
+ *      catchPhrase: // value for 'catchPhrase'
+ *      addImages: // value for 'addImages'
+ *      deleteImages: // value for 'deleteImages'
+ *   },
+ * });
+ */
+export function useChangeHeroMutation(baseOptions?: Apollo.MutationHookOptions<ChangeHeroMutation, ChangeHeroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeHeroMutation, ChangeHeroMutationVariables>(ChangeHeroDocument, options);
+      }
+export type ChangeHeroMutationHookResult = ReturnType<typeof useChangeHeroMutation>;
+export type ChangeHeroMutationResult = Apollo.MutationResult<ChangeHeroMutation>;
+export type ChangeHeroMutationOptions = Apollo.BaseMutationOptions<ChangeHeroMutation, ChangeHeroMutationVariables>;
+export const DeleteHeroDocument = gql`
+    mutation DeleteHero($deleteHeroId: ID!) {
+  deleteHero(id: $deleteHeroId)
+}
+    `;
+export type DeleteHeroMutationFn = Apollo.MutationFunction<DeleteHeroMutation, DeleteHeroMutationVariables>;
+
+/**
+ * __useDeleteHeroMutation__
+ *
+ * To run a mutation, you first call `useDeleteHeroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHeroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHeroMutation, { data, loading, error }] = useDeleteHeroMutation({
+ *   variables: {
+ *      deleteHeroId: // value for 'deleteHeroId'
+ *   },
+ * });
+ */
+export function useDeleteHeroMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHeroMutation, DeleteHeroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteHeroMutation, DeleteHeroMutationVariables>(DeleteHeroDocument, options);
+      }
+export type DeleteHeroMutationHookResult = ReturnType<typeof useDeleteHeroMutation>;
+export type DeleteHeroMutationResult = Apollo.MutationResult<DeleteHeroMutation>;
+export type DeleteHeroMutationOptions = Apollo.BaseMutationOptions<DeleteHeroMutation, DeleteHeroMutationVariables>;
+export const CountHerosDocument = gql`
+    query CountHeros {
+  countHeros
+}
+    `;
+
+/**
+ * __useCountHerosQuery__
+ *
+ * To run a query within a React component, call `useCountHerosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountHerosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountHerosQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCountHerosQuery(baseOptions?: Apollo.QueryHookOptions<CountHerosQuery, CountHerosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CountHerosQuery, CountHerosQueryVariables>(CountHerosDocument, options);
+      }
+export function useCountHerosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountHerosQuery, CountHerosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CountHerosQuery, CountHerosQueryVariables>(CountHerosDocument, options);
+        }
+export type CountHerosQueryHookResult = ReturnType<typeof useCountHerosQuery>;
+export type CountHerosLazyQueryHookResult = ReturnType<typeof useCountHerosLazyQuery>;
+export type CountHerosQueryResult = Apollo.QueryResult<CountHerosQuery, CountHerosQueryVariables>;
 export const HeroDocument = gql`
     query Hero($heroId: ID!) {
   hero(id: $heroId) {
