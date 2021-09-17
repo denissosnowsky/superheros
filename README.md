@@ -19,8 +19,8 @@ This command will install all the needed dependencies to the client and server;
 This project uses postgresql database to store data.\
 Now you need to tell the server the URL that points to your own database.
 
-Enter `server` directory and find a file called `.env`. This file store the environment variable which sets the url to your database.\
-The example of the URL:
+Enter `server` directory and create a file called `.env`. This file store the environment variable which sets the url to your database.\
+The example of the URL variable:
 
 ```javascript
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
