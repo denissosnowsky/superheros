@@ -10,11 +10,19 @@ In the project directory run:
 
 Then in the project directory run:
 
-### `yarn run install:project`
+### `yarn run install:client`
 
-This command will install all the needed dependencies to the client and server;
+This command will install all the needed dependencies to the client.
 
 ## Step 3
+
+Then in the project directory run:
+
+### `yarn run install:server`
+
+This command will install all the needed dependencies to the server.
+
+## Step 4
 
 This project uses postgresql database to store data.\
 Now you need to tell the server the URL that points to your own database.
@@ -28,14 +36,14 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 
 Enter in the `.env` file URL to your postgresql database as shown above.
 
-## Step 4
+## Step 5
 
 Now you need to migrate project data models to your database.\
 In order to do that, run this command from the project root directory:
 
 ### `yarn run migrate`
 
-## Step 5
+## Step 6
 
 Now your project is good to go.
 
