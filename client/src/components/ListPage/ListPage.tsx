@@ -20,6 +20,8 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import { googleUrl } from "../../config";
 import DeleteHeroModal from "../DeleteHeroModal/DeleteHeroModal";
 import ChangeHeroModal from "../ChangeHeroModal/ChangeHeroModal";
+import { showSuccess } from "../../utils/showSucces";
+import { showError } from "../../utils/showError";
 
 interface ListPagePropsType {}
 
@@ -28,8 +30,8 @@ const ListPage: React.FC = () => {
 
   const [page, setPage] = useState(1);
   const [openAdd, setOpenAdd] = useState(false);
-  const [openDelete, setOpenDelete] = useState<number>(0); //save here id of the hero to delete
-  const [openChange, setOpenChange] = useState<number>(0); //save here id of the hero to change
+  const [openDelete, setOpenDelete] = useState<number>(0); //save here hero's id to delete in the modal
+  const [openChange, setOpenChange] = useState<number>(0); //save here hero's id to change in the modal
 
   const {
     data: dataHeros,
@@ -43,7 +45,7 @@ const ListPage: React.FC = () => {
       herosTake: TAKE,
     },
   });
-
+console.log('fetch');
   const {
     data: dataCount,
     loading: loadingCount,
@@ -53,17 +55,51 @@ const ListPage: React.FC = () => {
   const [
     deleteHero,
     { data: dataDelete, loading: loadingDelete, error: errorDelete },
-  ] = useDeleteHeroMutation({ refetchQueries: ["Heros", "CountHeros"] });
+  ] = useDeleteHeroMutation({
+    refetchQueries: ["Heros", "CountHeros"],
+    onCompleted(data) {
+      data
+        ? showSuccess("Герой успешно удален!")
+        : showError("Ошибка. Герой не удален!");
+    },
+    onError(error) {
+      showError("Ошибка. Герой не удален!");
+    },
+  });
 
   const [
     addHero,
     { data: dataAddHero, loading: loadingAddHero, error: errorAddHero },
-  ] = useAddHeroMutation({ refetchQueries: ["Heros", "CountHeros"] });
+  ] = useAddHeroMutation({
+    refetchQueries: ["Heros", "CountHeros"],
+    onCompleted(data) {
+      data
+        ? showSuccess("Герой успешно добавлен!")
+        : showError("Ошибка. Герой не добавлен!");
+    },
+    onError(error) {
+      showError("Ошибка. Герой не добавлен!");
+    },
+  });
 
   const [
     changeHero,
-    { data: dataChangeHero, loading: loadingChangeHero, error: errorChangeHero },
-  ] = useChangeHeroMutation({ refetchQueries: ["Heros", "CountHeros"] });
+    {
+      data: dataChangeHero,
+      loading: loadingChangeHero,
+      error: errorChangeHero,
+    },
+  ] = useChangeHeroMutation({
+    refetchQueries: ["Heros", "CountHeros"],
+    onCompleted(data) {
+      data
+        ? showSuccess("Герой успешно изменен!")
+        : showError("Ошибка. Герой не изменен!");
+    },
+    onError(error) {
+      showError("Ошибка. Герой не изменен!");
+    },
+  });
 
   useEffect(() => {
     fetchMoreHeros({
@@ -74,7 +110,13 @@ const ListPage: React.FC = () => {
     });
   }, [page]);
 
-  if (errorHeros || errorAddHero || errorCount || errorDelete || errorChangeHero) {
+  if (
+    errorHeros ||
+    errorAddHero ||
+    errorCount ||
+    errorDelete ||
+    errorChangeHero
+  ) {
     return <ErrorPage />;
   }
 
@@ -108,7 +150,11 @@ const ListPage: React.FC = () => {
         <ChangeHeroModal
           isShow={openChange}
           setShow={setOpenChange}
-          data={dataHeros!.heros!.filter(obj=>obj?.id === String(openChange))[0]!}
+          data={
+            dataHeros!.heros!.filter(
+              (obj) => obj?.id === String(openChange)
+            )[0]!
+          }
           addMutation={(args) =>
             changeHero({
               variables: args,
@@ -116,7 +162,13 @@ const ListPage: React.FC = () => {
           }
         />
       )}
-      <Header btnOnClick={setOpenAdd} />
+      <Header
+        btnOnClick={() => setOpenAdd(true)}
+        text={"Добавить героя"}
+        color={"success"}
+        position={"end"}
+        icon={"bi bi-plus-circle"}
+      />
       <div>
         <Container className={s.container}>
           {loadingAddHero ||
@@ -132,10 +184,11 @@ const ListPage: React.FC = () => {
                 {dataHeros && dataHeros!.heros!.length > 0 ? (
                   dataHeros!.heros!.map((item) => (
                     <ListItem
-                      deleteClb={()=>setOpenDelete(+item?.id!)}
-                      changeClb={()=>setOpenChange(+item?.id!)}
+                      deleteClb={() => setOpenDelete(+item?.id!)}
+                      changeClb={() => setOpenChange(+item?.id!)}
                       key={item?.id}
                       name={item?.nickname!}
+                      id={item?.id!}
                       img={
                         item!.images!.length > 0
                           ? `${googleUrl}${item?.images![0]!.name!}`

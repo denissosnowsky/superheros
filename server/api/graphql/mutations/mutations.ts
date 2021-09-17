@@ -37,9 +37,10 @@ export const Mutation = new GraphQLObjectType({
           });
 
           if (args.images.length > 0) {
-            args.images.forEach(async (item: any) => {
-              let { filename, createReadStream } = await item;
+            for (let i = 0; i < args.images.length; i++) {
+              let { filename, createReadStream } = await args.images[i];
               let imageName = uuidv4() + filename;
+
               await new Promise((res) =>
                 createReadStream()
                   .pipe(
@@ -59,8 +60,9 @@ export const Mutation = new GraphQLObjectType({
                   heroId: hero.id,
                 },
               });
-            });
+            }
           }
+
           return true;
         } catch (e) {
           return false;
@@ -95,22 +97,20 @@ export const Mutation = new GraphQLObjectType({
           });
 
           if (args.deleteImages.length > 0) {
-            args.deleteImages.forEach(
-              async (item: typeof GraphQLID, i: number) => {
-                const imageName = await ctx.prisma.images.delete({
-                  where: {
-                    id: +item,
-                  },
-                });
-                ctx.googleBucket.file(imageName.name) &&
-                  (await ctx.googleBucket.file(imageName.name).delete());
-              }
-            );
+            for (let i = 0; i < args.deleteImages.length; i++) {
+              const imageName = await ctx.prisma.images.delete({
+                where: {
+                  id: +args.deleteImages[i],
+                },
+              });
+              ctx.googleBucket.file(imageName.name) &&
+                (await ctx.googleBucket.file(imageName.name).delete());
+            }
           }
-
+          console.log(args.addImages.length)
           if (args.addImages.length > 0) {
-            args.addImages.forEach(async (item: any) => {
-              let { filename, createReadStream } = await item;
+            for (let i = 0; i < args.addImages.length; i++) {
+              let { filename, createReadStream } = await args.addImages[i];
               let imageName = uuidv4() + filename;
               await new Promise((res) =>
                 createReadStream()
@@ -131,7 +131,7 @@ export const Mutation = new GraphQLObjectType({
                   heroId: hero.id,
                 },
               });
-            });
+            }
           }
 
           return true;
@@ -151,10 +151,10 @@ export const Mutation = new GraphQLObjectType({
         });
 
         if (imagesNames.length > 0) {
-          imagesNames.forEach(async (item) => {
-            ctx.googleBucket.file(item.name) &&
-              (await ctx.googleBucket.file(item.name).delete());
-          });
+          for (let i = 0; i < imagesNames.length; i++) {
+            ctx.googleBucket.file(imagesNames[i].name) &&
+              (await ctx.googleBucket.file(imagesNames[i].name).delete());
+          }
         }
 
         await ctx.prisma.images.deleteMany({

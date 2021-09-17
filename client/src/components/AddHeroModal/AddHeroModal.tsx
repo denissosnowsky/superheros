@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import s from "./AddHeroModal.module.css";
 import { ChangeEvent, useState } from "react";
 import { AddHeroMutationVariables } from "../../store/generated/graphql";
+import { showError } from "../../utils/showError";
 
 interface AddHeroModalPropsType {
   isShow: boolean;
@@ -45,11 +46,11 @@ const AddHeroModal: React.FC<AddHeroModalPropsType> = ({
   };
 
   const handleAdd = () => {
-    if (!nickname) return /* showError("Введите Никнейм") */;
-    if (!realName) return /* showError("Введите Реальное Имя") */;
-    if (!originDescription) return /* showError("Введите Происхождение") */;
-    if (!superPowers) return /* showError("Введите Суперсилы") */;
-    if (!catchPhrase) return /* showError("Введите Кредо") */;
+    if (!nickname) return showError("Введите Никнейм");
+    if (!realName) return showError("Введите Реальное Имя");
+    if (!originDescription) return showError("Введите Происхождение");
+    if (!superPowers) return showError("Введите Суперсилы");
+    if (!catchPhrase) return showError("Введите Кредо");
     const args: AddHeroMutationVariables = {
       nickname: nickname!,
       realName: realName!,
@@ -60,7 +61,6 @@ const AddHeroModal: React.FC<AddHeroModalPropsType> = ({
     };
     addMutation(args);
     setShow(false);
-    /* showSuccess('Балон добавлен'); */
   };
 
   return (

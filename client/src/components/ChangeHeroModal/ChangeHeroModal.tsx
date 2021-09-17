@@ -8,6 +8,7 @@ import { ChangeEvent, useState } from "react";
 import { ChangeHeroMutationVariables } from "../../store/generated/graphql";
 import { googleUrl } from "../../config";
 import { Maybe } from "graphql/jsutils/Maybe";
+import { showError } from "../../utils/showError";
 
 type fetchedData = {
   id: string;
@@ -51,8 +52,9 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
 
   const handlePhoto = (event: ChangeEvent<HTMLInputElement>) => {
     if (event?.currentTarget?.files && event?.currentTarget?.files.length > 0) {
+      const newPhotos: Array<File> = [];
       for (let i = 0; i < event?.currentTarget?.files.length; i++) {
-        setPhotos([...photos, event?.currentTarget?.files[i]]);
+        newPhotos.push(event?.currentTarget?.files![i]);
 
         var oFReader = new FileReader();
         oFReader.readAsDataURL(event?.currentTarget?.files[i]);
@@ -60,6 +62,7 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
           setPreload((preload) => [...preload, oFREvent?.target?.result!]);
         };
       }
+      setPhotos((photos) => [...photos, ...newPhotos]);
     }
   };
 
@@ -68,11 +71,11 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
   };
 
   const handleAdd = () => {
-    if (!nickname) return /* showError("Введите Никнейм") */;
-    if (!realName) return /* showError("Введите Реальное Имя") */;
-    if (!originDescription) return /* showError("Введите Происхождение") */;
-    if (!superPowers) return /* showError("Введите Суперсилы") */;
-    if (!catchPhrase) return /* showError("Введите Кредо") */;
+    if (!nickname) return showError("Введите Никнейм");
+    if (!realName) return showError("Введите Реальное Имя");
+    if (!originDescription) return showError("Введите Происхождение");
+    if (!superPowers) return showError("Введите Суперсилы");
+    if (!catchPhrase) return showError("Введите Кредо");
     const args: ChangeHeroMutationVariables = {
       id: String(data.id),
       nickname: nickname!,
@@ -85,7 +88,6 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
     };
     addMutation(args);
     setShow(0);
-    /* showSuccess('Балон добавлен'); */
   };
 
   const handleDeletePhoto = (name: string) => {
