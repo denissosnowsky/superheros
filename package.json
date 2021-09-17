@@ -1,0 +1,20 @@
+{
+  "name": "Heros",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/denissosnowsky/superheros.git",
+  "author": "Den <denissosnowsky@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^6.2.1"
+  },
+  "scripts": {
+    "start:client": "cd client && yarn start",
+    "start:server": "cd server && yarn run dev",
+    "install:client": "cd client && yarn install",
+    "install:server": "cd server && yarn install",
+    "migrate": "cd server && yarn run first_migrate",
+    "start": "concurrently  \"yarn run start:server\" \"yarn run start:client\"",
+    "install:project": "concurrently \"yarn run install:client\" \"yarn run install:client\""
+  }
+}

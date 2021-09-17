@@ -107,7 +107,7 @@ export const Mutation = new GraphQLObjectType({
                 (await ctx.googleBucket.file(imageName.name).delete());
             }
           }
-          console.log(args.addImages.length)
+          
           if (args.addImages.length > 0) {
             for (let i = 0; i < args.addImages.length; i++) {
               let { filename, createReadStream } = await args.addImages[i];
