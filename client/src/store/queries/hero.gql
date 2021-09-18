@@ -1,4 +1,4 @@
-query Hero($heroId: ID!){
+export query Hero($heroId: ID!){
   hero(id: $heroId) {
     id
     createdAt

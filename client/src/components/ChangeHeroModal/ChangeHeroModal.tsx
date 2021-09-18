@@ -10,7 +10,7 @@ import { googleUrl } from "../../config";
 import { Maybe } from "graphql/jsutils/Maybe";
 import { showError } from "../../utils/showError";
 
-type fetchedData = {
+export type fetchedData = {
   id: string;
   createdAt: any;
   updatedAt: any;
@@ -45,7 +45,7 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
   const [photos, setPhotos] = useState<Array<File>>([]);
   const [deletePhotosId, setDeletePhotosId] = useState<Array<string>>([]);
   const [preload, setPreload] = useState<Array<string | ArrayBuffer>>(
-    data.images!.length > 0
+    (data.images && data.images!.length > 0)
       ? data.images!.map((obj) => `${googleUrl}${obj?.name}`)
       : []
   );
@@ -223,7 +223,7 @@ const ChangeHeroModal: React.FC<ChangeHeroModalPropsType> = ({
             {preload.length > 0 &&
               preload.map((item, i) => (
                 <Col key={i} md={3} className={s.preloadCol}>
-                  <div className={s.deleteImg}>
+                  <div className={s.deleteImg} data-testid='img'>
                     <Button
                       onClick={() => handleDeletePhoto(item as string)}
                       variant="danger"

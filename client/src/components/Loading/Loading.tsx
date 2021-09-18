@@ -3,7 +3,7 @@ import loading from '../../assets/loading.gif'
 
 const Loading: React.FC = () => {
     return (
-        <div className={s.wrapper}>
+        <div className={s.wrapper} data-testid='loading'>
             <img src={loading} alt='loading'/>
         </div>
     );

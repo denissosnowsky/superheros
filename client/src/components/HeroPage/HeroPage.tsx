@@ -44,7 +44,7 @@ const HeroPage: React.FC<HeroPagePropsType> = () => {
         position={"start"}
         icon={"bi bi-arrow-left-circle"}
       />
-      <Container>
+      <Container data-testid='container'>
         <Row className={s.infoRow}>
           <Col md={4}>
             <div className={s.imgWrapper}>

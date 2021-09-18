@@ -22,7 +22,6 @@ const DeleteHeroModal: React.FC<DeleteHeroModalPropsType> = ({
   const handleConfirm = () => {
     addMutation();
     setShow(0);
-    /* showSuccess('Балон добавлен'); */
   };
 
   return (
